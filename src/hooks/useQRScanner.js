@@ -54,7 +54,7 @@ export function useQRScanner({ onDecode, enabled = false }) {
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
-    if (video.readyState === video.HAVE_ENOUGH_DATA) {
+    if (video.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       const ctx = canvas.getContext('2d');

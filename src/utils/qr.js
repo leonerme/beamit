@@ -9,9 +9,9 @@ import jsQR from 'jsqr';
  */
 export async function generateQRCode(text) {
   return QRCode.toDataURL(text, {
-    errorCorrectionLevel: 'L', // Low EC to maximize data capacity
+    errorCorrectionLevel: 'M', // Medium EC for better scan reliability
     margin: 2,
-    width: 320,
+    width: 380,
     color: {
       dark: '#0d1117',
       light: '#f0f4ff',
@@ -26,7 +26,7 @@ export async function generateQRCode(text) {
  */
 export function decodeQRFromImageData(imageData) {
   const result = jsQR(imageData.data, imageData.width, imageData.height, {
-    inversionAttempts: 'dontInvert',
+    inversionAttempts: 'attemptBoth',
   });
   return result?.data ?? null;
 }
