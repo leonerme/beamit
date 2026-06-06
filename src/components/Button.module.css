@@ -1,0 +1,92 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    opacity var(--transition-fast);
+  user-select: none;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:active:not(:disabled) { transform: scale(0.97); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Sizes */
+.sm { padding: 7px 14px; font-size: 0.8rem; border-radius: var(--radius-sm); }
+.md { padding: 10px 20px; font-size: 0.9rem; }
+.lg { padding: 14px 28px; font-size: 1rem; border-radius: var(--radius-lg); }
+.xl { padding: 16px 36px; font-size: 1.05rem; border-radius: var(--radius-lg); }
+
+/* Variants */
+.primary {
+  background: var(--accent-primary);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(79, 158, 255, 0.25);
+}
+.primary:hover:not(:disabled) {
+  background: #6aadff;
+  box-shadow: 0 0 30px rgba(79, 158, 255, 0.4);
+}
+
+.secondary {
+  background: var(--bg-glass);
+  color: var(--text-primary);
+  border-color: var(--border-glass);
+}
+.secondary:hover:not(:disabled) {
+  background: var(--bg-glass-hover);
+  border-color: var(--border-active);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: transparent;
+}
+.ghost:hover:not(:disabled) {
+  background: var(--bg-glass);
+  color: var(--text-primary);
+}
+
+.danger {
+  background: rgba(248, 113, 113, 0.15);
+  color: var(--accent-danger);
+  border-color: rgba(248, 113, 113, 0.25);
+}
+.danger:hover:not(:disabled) {
+  background: rgba(248, 113, 113, 0.25);
+}
+
+.success {
+  background: rgba(52, 211, 153, 0.15);
+  color: var(--accent-success);
+  border-color: rgba(52, 211, 153, 0.25);
+}
+
+/* Loading */
+.loading .content { opacity: 0.6; }
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }

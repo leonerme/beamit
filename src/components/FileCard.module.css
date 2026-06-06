@@ -1,0 +1,95 @@
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+  animation: fadeIn 0.2s both;
+}
+
+.card.done   { border-color: rgba(52,211,153,0.2); }
+.card.error  { border-color: rgba(248,113,113,0.2); background: rgba(248,113,113,0.03); }
+
+.iconWrap {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+}
+
+.icon { font-size: 1.1rem; line-height: 1; }
+
+.info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.size {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.77rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 500;
+  font-family: var(--font-sans);
+}
+
+.verified   { background: rgba(52,211,153,0.1); color: var(--accent-success); border: 1px solid rgba(52,211,153,0.2); }
+.unverified { background: rgba(251,191,36,0.1); color: var(--accent-warning); border: 1px solid rgba(251,191,36,0.2); }
+.errBadge   { background: rgba(248,113,113,0.1); color: var(--accent-danger);  border: 1px solid rgba(248,113,113,0.2); }
+
+.queuedLabel { color: var(--text-muted); font-family: var(--font-sans); font-size: 0.77rem; }
+
+.actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: 6px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

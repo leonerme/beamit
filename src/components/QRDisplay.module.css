@@ -1,0 +1,94 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.qrContainer {
+  position: relative;
+  padding: 12px;
+  background: var(--text-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md), 0 0 40px rgba(79,158,255,0.1);
+}
+
+.qrImage {
+  display: block;
+  width: 240px;
+  height: 240px;
+  border-radius: var(--radius-sm);
+}
+
+/* Corner decorations */
+.corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: var(--accent-primary);
+  border-style: solid;
+}
+.corner:nth-child(2) { border-width: 2px 0 0 2px; border-top-left-radius: 4px; }
+.corner:nth-child(3) { border-width: 2px 2px 0 0; border-top-right-radius: 4px; }
+.corner:nth-child(4) { border-width: 0 0 2px 2px; border-bottom-left-radius: 4px; }
+.corner:nth-child(5) { border-width: 0 2px 2px 0; border-bottom-right-radius: 4px; }
+
+.placeholder {
+  width: 240px;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--border-glass);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.errorBox {
+  background: rgba(248,113,113,0.1);
+  border: 1px solid rgba(248,113,113,0.2);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  color: var(--accent-danger);
+  font-size: 0.85rem;
+  text-align: center;
+  max-width: 280px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.rawSdp {
+  width: 100%;
+  max-width: 320px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  resize: none;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  color: var(--text-secondary);
+}
