@@ -93,7 +93,7 @@ export class FileTransferService {
     // Protocol: first 36 bytes = fileId (UTF-8), next 4 bytes = chunkIndex (uint32), rest = data
     const view = new DataView(buffer);
     const fileIdBytes = new Uint8Array(buffer, 0, 36);
-    const fileId = new TextDecoder().decode(fileIdBytes);
+    const fileId = new TextDecoder().decode(fileIdBytes).replace(/\0+$/, '');
     const chunkIndex = view.getUint32(36, false);
     const chunkData = buffer.slice(40);
 
@@ -130,7 +130,7 @@ export class FileTransferService {
   _initReceiveBuffer(msg) {
     this.receiveBuffers.set(msg.fileId, {
       meta: msg.meta,
-      chunks: [],
+      chunks: new Array(msg.meta.totalChunks),
       receivedBytes: 0,
       startTime: Date.now(),
     });

@@ -1,19 +1,23 @@
+import { sha256 as nobleSha256 } from '@noble/hashes/sha2.js';
+
 /**
  * Compute SHA-256 hash of a File object.
- * Streams through the file in 4MB slices to avoid memory issues with large files.
+ * Streams through the file in chunks to avoid loading the full file into memory.
  * @param {File} file
  * @returns {Promise<string>} hex string
  */
 export async function sha256File(file) {
-  const SLICE = 4 * 1024 * 1024; // 4MB
-  const hashObj = await crypto.subtle.digest.bind(crypto.subtle);
+  if (file.stream && typeof file.stream === 'function') {
+    const reader = file.stream().getReader();
+    const hasher = nobleSha256.create();
 
-  // For large files, stream through chunks
-  if (file.size > SLICE) {
-    // Read entire file into ArrayBuffer (browser handles streaming internally)
-    // For very large files this is acceptable as we need to hash
-    const buffer = await file.arrayBuffer();
-    return sha256Buffer(buffer);
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      hasher.update(value);
+    }
+
+    return bufToHex(hasher.digest());
   }
 
   const buffer = await file.arrayBuffer();
