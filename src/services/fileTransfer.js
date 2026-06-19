@@ -1,7 +1,8 @@
 import { sha256File, sha256Buffer } from '../utils/crypto.js';
 
-const CHUNK_SIZE = 64 * 1024; // 64KB chunks
-const MAX_BUFFER = 4 * 1024 * 1024; // 4MB backpressure
+const CHUNK_SIZE = 128 * 1024; // 128KB chunks
+const MAX_BUFFER = 16 * 1024 * 1024; // 16MB backpressure
+const BUFFER_LOW_THRESHOLD = 1 * 1024 * 1024; // 1MB low-water mark
 const HASH_VERIFY_THRESHOLD = 200 * 1024 * 1024; // 200MB: skip full rehash for very large files to avoid out-of-memory issues
 
 const MSG_TYPE = {
@@ -310,15 +311,25 @@ export class FileTransferService {
   }
 
   _waitForBuffer() {
+    if (this.rtc.getBufferedAmount() < MAX_BUFFER) {
+      return Promise.resolve();
+    }
+
     return new Promise((resolve) => {
-      const check = () => {
+      const channel = this.rtc.dataChannel;
+      if (!channel) {
+        resolve();
+        return;
+      }
+
+      const onLow = () => {
         if (this.rtc.getBufferedAmount() < MAX_BUFFER) {
+          channel.removeEventListener('bufferedamountlow', onLow);
           resolve();
-        } else {
-          setTimeout(check, 50);
         }
       };
-      check();
+
+      channel.addEventListener('bufferedamountlow', onLow);
     });
   }
 

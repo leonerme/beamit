@@ -48,7 +48,7 @@ export function SettingsPage() {
             </div>
             <div className={styles.aboutRow}>
               <span className={styles.aboutLabel}>Chunk size</span>
-              <span className={styles.aboutValue}>64 KB</span>
+              <span className={styles.aboutValue}>128 KB</span>
             </div>
             <div className={styles.aboutRow}>
               <span className={styles.aboutLabel}>Integrity</span>

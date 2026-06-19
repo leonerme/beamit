@@ -186,6 +186,7 @@ export class WebRTCService {
 
   _setupDataChannel(channel) {
     channel.binaryType = 'arraybuffer';
+    channel.bufferedAmountLowThreshold = 1 * 1024 * 1024; // 1MB low-water mark for faster send resume
 
     channel.onopen = () => {
       if (this.onDataChannelOpen) this.onDataChannelOpen();
