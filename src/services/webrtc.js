@@ -9,7 +9,8 @@ const RTC_CONFIG = {
 
 const DATA_CHANNEL_OPTIONS = {
   ordered: true,
-  maxRetransmits: 30,
+  // Use reliable ordered delivery for large files. Partial reliability can drop chunks
+  // on unstable networks and break large transfers.
 };
 
 export class WebRTCService {
@@ -113,7 +114,7 @@ export class WebRTCService {
     } catch (err) {
       pc.close();
       this.pc = null;
-      throw new Error(`Failed to create offer: ${err.message}`);
+      throw new Error(`Failed to create offer: ${err.message}`, { cause: err });
     }
   }
 
@@ -139,7 +140,7 @@ export class WebRTCService {
     } catch (err) {
       pc.close();
       this.pc = null;
-      throw new Error(`Failed to set remote offer: ${err.message}`);
+      throw new Error(`Failed to set remote offer: ${err.message}`, { cause: err });
     }
 
     try {
@@ -148,7 +149,7 @@ export class WebRTCService {
     } catch (err) {
       pc.close();
       this.pc = null;
-      throw new Error(`Failed to create answer: ${err.message}`);
+      throw new Error(`Failed to create answer: ${err.message}`, { cause: err });
     }
 
     await this._waitForICEGathering(pc);
@@ -179,7 +180,7 @@ export class WebRTCService {
     try {
       await this.pc.setRemoteDescription(answerObj);
     } catch (err) {
-      throw new Error(`Failed to set remote answer: ${err.message}`);
+      throw new Error(`Failed to set remote answer: ${err.message}`, { cause: err });
     }
   }
 

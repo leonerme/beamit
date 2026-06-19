@@ -1,8 +1,8 @@
 import { sha256File, sha256Buffer } from '../utils/crypto.js';
 
 const CHUNK_SIZE = 64 * 1024; // 64KB chunks
-const BUFFERED_AMOUNT_LOW_THRESHOLD = 1024 * 1024; // 1MB
 const MAX_BUFFER = 4 * 1024 * 1024; // 4MB backpressure
+const HASH_VERIFY_THRESHOLD = 200 * 1024 * 1024; // 200MB: skip full rehash for very large files to avoid out-of-memory issues
 
 const MSG_TYPE = {
   FILE_META: 'FILE_META',
@@ -149,20 +149,18 @@ export class FileTransferService {
     if (!entry) return;
 
     try {
-      // Reassemble chunks in order
-      const totalSize = entry.chunks.reduce((s, c) => s + c.byteLength, 0);
-      const combined = new Uint8Array(totalSize);
-      let offset = 0;
-      for (const chunk of entry.chunks) {
-        combined.set(new Uint8Array(chunk), offset);
-        offset += chunk.byteLength;
+      if (entry.receivedBytes !== entry.meta.size || entry.chunks.some((chunk) => !chunk)) {
+        throw new Error('Incomplete file received');
       }
 
-      // Verify hash
-      const hash = await sha256Buffer(combined.buffer);
-      const verified = hash === entry.meta.hash;
+      // Reassemble chunks in order as a Blob to avoid allocating one massive typed array.
+      const blob = new Blob(entry.chunks, { type: entry.meta.mimeType || 'application/octet-stream' });
+      let verified = true;
 
-      const blob = new Blob([combined], { type: entry.meta.mimeType || 'application/octet-stream' });
+      if (entry.meta.hash && entry.meta.size <= HASH_VERIFY_THRESHOLD) {
+        const hash = await sha256Buffer(await blob.arrayBuffer());
+        verified = hash === entry.meta.hash;
+      }
 
       this._sendControl({
         type: verified ? MSG_TYPE.FILE_VERIFIED : MSG_TYPE.FILE_ERROR,
